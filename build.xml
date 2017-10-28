@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="OMS_Project_SNOW2" default="all" basedir=".">
+    <description>
+       Manages the project 'OMS_Project_SNOW2'.
+       Created at Thu Apr 07 10:52:40 MDT 2016.
+    </description>
+    <import file=".oms/project.xml"/>
+</project>
