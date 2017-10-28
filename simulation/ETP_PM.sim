@@ -1,0 +1,43 @@
+import static oms3.SimBuilder.instance as OMS3
+def home = oms_prj
+
+def startDate= "2005-05-01 00:00"
+def endDate= "2005-05-12 00:00"
+
+OMS3.sim {
+     resource "$oms_prj/lib"
+
+ model(while:"reader_data_temp.doProcess") {
+   components {
+        "reader_data_temp"           	"org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+        "reader_data_rad"             	"org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+        //"reader_data_press"            	"org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorReader"
+        "PMEtpDaily"                    "etp.OmsPenmanMonteithETDaily"     
+        "writer_etp"                  	"org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorWriter"      
+   }
+   parameter{  
+   		// READER     
+        "reader_data_temp.file"         "${home}/data/faoetpday_in_tmax.csv"
+        "reader_data_temp.idfield"      "ID"  
+        "reader_data_temp.tStart"       "${startDate}"
+        "reader_data_temp.tEnd"         "${endDate}"
+        "reader_data_temp.tTimestep"    60*24
+        "reader_data_temp.fileNovalue"  "-9999"
+        "reader_data_rad.file"          "${home}/data/faoetpday_in_rad.csv" 
+        "reader_data_rad.idfield"       "ID"
+        "reader_data_rad.tStart"        "${startDate}"
+        "reader_data_rad.tEnd"          "${endDate}"
+        "reader_data_rad.tTimestep"     60*24  
+        "reader_data_rad.fileNovalue"   "-9999"
+        // WRITER
+        "writer_etp.file"        		"${home}/output/ET_penman.csv" 
+        "writer_etp.tStart"       		"${startDate}"
+        "writer_etp.tTimestep"   		60*24
+        }
+        connect {
+        	"reader_data_temp.outData"  "PMEtpDaily.inMaxTemp"
+        	"reader_data_rad.outData"   "PMEtpDaily.inNetradiation"
+        	"PMEtpDaily.outPMEtp"  "writer_etp.inData"
+        	}
+        	}
+        	}
